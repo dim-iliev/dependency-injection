@@ -28,14 +28,15 @@ const build = (from?: Manifest) => {
       return build(manifest);
     },
     resolve: (name: string) => {
-      return resolveFromManifest(manifest, [name])[0]?.resolve() || null;
+      return resolveFromManifest(manifest, [name])[0];
     },
     inject: (method: Function, dependecies?: string[]) => {
       const params = resolveFromManifest(
         manifest,
         dependecies || parseDepdendecies(method)
       );
-      return method(...params);
+
+      return () => method(...params);
     },
   };
 };
