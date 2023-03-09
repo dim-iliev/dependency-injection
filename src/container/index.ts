@@ -6,26 +6,40 @@ import makeManifest, {
   resolveFromManifest,
 } from "./manifest";
 
-const build = (from?: Manifest) => {
+const build = (from?: Manifest, buildOptions: {allowOverwrite?: boolean} = {}) => {
   const manifest = from ? copyManifest(from) : makeManifest();
+  let options = {
+    allowOverwrite: true,
+    ...buildOptions
+  }
 
   return {
+    allowOverwrite() {
+      options.allowOverwrite = true
+    },
+    disableOverwrite() {
+      options.allowOverwrite = false;
+    },
     transient: <T extends Function>(
       name: string,
       instance: T,
       dependecies?: string[]
     ) => {
-      manifest[name] = buildTransient(instance, dependecies)
+      if(options.allowOverwrite || !manifest[name]) {
+        manifest[name] = buildTransient(instance, dependecies)
+      }
     },
     persistent: <T extends Function>(
       name: string,
       instance: T,
       dependecies?: string[]
     ) => {
-      manifest[name] = buildPersistent(instance, dependecies)
+      if(options.allowOverwrite || !manifest[name]) {
+        manifest[name] = buildPersistent(instance, dependecies)
+      }
     },
     scoped: () => {
-      return build(manifest);
+      return build(manifest, options);
     },
     resolve: (name: string) => {
       return resolveFromManifest(manifest, [name])[0];
