@@ -26,7 +26,7 @@ const build = (from?: Manifest, buildOptions: {allowOverwrite?: boolean} = {}) =
       dependecies?: string[]
     ) => {
       if(options.allowOverwrite || !manifest[name]) {
-        manifest[name] = buildTransient(instance, dependecies)
+        manifest[name] = buildTransient(instance, name, dependecies)
       }
     },
     persistent: <T extends Function>(
@@ -35,7 +35,7 @@ const build = (from?: Manifest, buildOptions: {allowOverwrite?: boolean} = {}) =
       dependecies?: string[]
     ) => {
       if(options.allowOverwrite || !manifest[name]) {
-        manifest[name] = buildPersistent(instance, dependecies)
+        manifest[name] = buildPersistent(instance, name, dependecies)
       }
     },
     scoped: () => {

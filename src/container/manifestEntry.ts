@@ -1,31 +1,40 @@
-import { resolveFromManifest } from './manifest';
-import { Manifest, ManifestEntry } from './../type.d';
-import { parseDepdendecies } from './depdendecies';
+import { resolveFromManifest } from "./manifest";
+import { Manifest, ManifestEntry } from "./../type.d";
+import { parseDepdendecies } from "./depdendecies";
 
-export const buildTransient = (instance: Function, depdendecies?: string[]): ManifestEntry => {
+export const buildTransient = (
+  instance: Function,
+  name: string,
+  depdendecies?: string[]
+): ManifestEntry => {
   const build = () => {
-    let result: ManifestEntry | null = null
+    let result: ManifestEntry | null = null;
     const args = depdendecies ?? parseDepdendecies(instance);
 
     return {
       build,
       resolve(manifest: Manifest) {
-        if(!result) {
-          const params = resolveFromManifest(manifest, args);
-          result = instance(...params);
+        try {
+          if (!result) {
+            const params = resolveFromManifest(manifest, args);
+            result = instance(...params);
+          }
+
+          return result;
+        } catch (e) {
+          console.error("Trying to get ", name);
+          throw e;
         }
+      },
+    };
+  };
 
-        return result
-      }
-    }
-  }
-
-  return build()
-}
-
+  return build();
+};
 
 export const buildPersistent = (
   instance: Function,
+  name: string,
   depdendecies?: string[]
 ): ManifestEntry => {
   let result: ManifestEntry | null = null;
@@ -35,12 +44,17 @@ export const buildPersistent = (
     return {
       build,
       resolve(manifest: Manifest) {
-        if (!result) {
-          const params = resolveFromManifest(manifest, args);
-          result = instance(...params);
-        }
+        try {
+          if (!result) {
+            const params = resolveFromManifest(manifest, args);
+            result = instance(...params);
+          }
 
-        return result;
+          return result;
+        } catch (e) {
+          console.error("Trying to get ", name);
+          throw e;
+        }
       },
     };
   };
