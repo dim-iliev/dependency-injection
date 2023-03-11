@@ -1,6 +1,6 @@
 {
   "name": "@dim.iliev/dependency-injection",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "A small dependency free package for DI",
   "main": "dist/index.js",
   "type": "commonjs",
