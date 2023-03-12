@@ -7,4 +7,5 @@ export const persistent = di.persistent
 export const resolve = di.resolve
 export const scoped = di.scoped
 export const inject = di.inject
+export const getNames = di.getNames
 export const createContainer = diContainer;

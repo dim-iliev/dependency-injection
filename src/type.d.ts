@@ -1,4 +1,4 @@
-import { persistent } from './index';
+import { persistent, getNames } from './index';
 export type Manifest = Record<string, ManifestEntry>
 
 export interface ManifestEntry {
@@ -33,4 +33,5 @@ export interface Container {
   resolve: (name: string) => any;
   allowOverwrite: () => void;
   disableOverwrite: () => void;
+  getNames: () => string[]
 }

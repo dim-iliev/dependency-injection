@@ -14,6 +14,9 @@ const build = (from?: Manifest, buildOptions: {allowOverwrite?: boolean} = {}) =
   }
 
   return {
+    getNames() {
+      return Object.keys(manifest)
+    },
     allowOverwrite() {
       options.allowOverwrite = true
     },

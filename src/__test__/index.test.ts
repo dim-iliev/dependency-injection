@@ -176,4 +176,11 @@ describe("Create di container", () => {
     expect(fooMockPersistent).toBeCalledTimes(1);
     expect(barMockTransient).toBeCalledTimes(0);
   });
+
+  it("returns the names of the registered instances", () => {
+    expect(di.getNames()).toHaveLength(0)
+    di.transient("foo", () => ({}))
+    di.transient("bar", () => ({}))
+    expect(di.getNames()).toEqual(["foo", "bar"])
+  })
 });
